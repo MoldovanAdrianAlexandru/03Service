@@ -1,13 +1,28 @@
 package com.aditreilinii.Service;
 
-public class User {
+import javax.persistence.*;
 
+@Entity
+@Table(name = "users")
+public class User {
+    @Id
+    @SequenceGenerator(
+            name = "users_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            generator = "users_sequence",
+            strategy = GenerationType.SEQUENCE
+    )
     private Long id;
     private String username;
     private String password;
     private String email;
     private String firstname;
     private String lastname;
+
+    public User() {
+    }
 
     public User(Long id, String username, String password, String email, String firstname, String lastname) {
         this.id = id;
@@ -21,13 +36,6 @@ public class User {
     public Long getId() {
         return id;
     }
-
-
-    // setid am nevoie ??
-    public void setId(Long id) {
-        this.id = id;
-    }
-
 
 
     public String getUsername() {
