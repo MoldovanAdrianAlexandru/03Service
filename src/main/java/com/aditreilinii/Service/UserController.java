@@ -1,23 +1,35 @@
 package com.aditreilinii.Service;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping
 public class UserController {
+    private final UserService userService;
 
-    @GetMapping(path = "/chatPage")
-    public String chatPage(){
-        return "This will be the chat page.";
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
-    @GetMapping(path = "/api/v1/users")
-    public List <User> getUser(){
-         return List.of(new User (1L, "foxie", "foxie", "foxie@gmail.com",  "adrian",  "alexandru"),
-         new User(2L, "aladin", "aladin", "aladin@gmail.com", "alex", "alex"));
 
+    @GetMapping(path = "/api/v1/users")
+    public List <User> getUsers(){
+         return userService.getUsers();
+    }
+    @PostMapping(path = "/api/v1/users")
+    public void createUser(@RequestBody User user){
+        userService.validateEmail(user.getEmail());
+        userService.createUser(user);
+    }
+
+    @PutMapping(path = "/api/v1/users/{id}")
+    public void updateUser(@PathVariable Long id, @RequestBody User user){
+        userService.updateUser(id, user);
+    }
+    @DeleteMapping(path = "/api/v1/users/{id}")
+    public void deleteUser(@PathVariable Long id){
+        userService.deleteUser(id);
     }
 
 }
